@@ -120,28 +120,28 @@ export class FetchRequest {
 
   async perform() {
     const { fetchOptions } = this
-    this.delegate.prepareRequest(this)
+    this.delegate.prepareRequest(this) //通知代理正在准备请求
     const event = await this.#allowRequestToBeIntercepted(fetchOptions)
     try {
-      this.delegate.requestStarted(this)
+      this.delegate.requestStarted(this) //通知代理请求开始
 
       if (event.detail.fetchRequest) {
         this.response = event.detail.fetchRequest.response
       } else {
         this.response = fetch(this.url.href, fetchOptions)
-      }
+      }//执行真正的请求
 
-      const response = await this.response
+      const response = await this.response //等待请求执行的结果
       return await this.receive(response)
     } catch (error) {
       if (error.name !== "AbortError") {
         if (this.#willDelegateErrorHandling(error)) {
-          this.delegate.requestErrored(this, error)
+          this.delegate.requestErrored(this, error) //通知代理请求异常了
         }
         throw error
       }
     } finally {
-      this.delegate.requestFinished(this)
+      this.delegate.requestFinished(this) //通知代理，请求完成
     }
   }
 
@@ -181,7 +181,7 @@ export class FetchRequest {
   }
 
   async #allowRequestToBeIntercepted(fetchOptions) {
-    const requestInterception = new Promise((resolve) => (this.#resolveRequestPromise = resolve))
+    const requestInterception = new Promise((resolve) => (this.#resolveRequestPromise = resolve)) //将resolve逃逸出局部作用域
     const event = dispatch("turbo:before-fetch-request", {
       cancelable: true,
       detail: {
@@ -190,7 +190,7 @@ export class FetchRequest {
         resume: this.#resolveRequestPromise
       },
       target: this.target
-    })
+    }) //派发自定义事件turbo:before-fetch-request
     this.url = event.detail.url
     if (event.defaultPrevented) await requestInterception
 

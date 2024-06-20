@@ -76,14 +76,14 @@ export class FormSubmission {
   async start() {
     const { initialized, requesting } = FormSubmissionState
     const confirmationMessage = getAttribute("data-turbo-confirm", this.submitter, this.formElement)
-
+    //如果存在确认信息，就需要使用原生dialog进行确认
     if (typeof confirmationMessage === "string") {
       const answer = await FormSubmission.confirmMethod(confirmationMessage, this.formElement, this.submitter)
       if (!answer) {
         return
       }
     }
-
+    //更新状态，开始执行请求
     if (this.state == initialized) {
       this.state = requesting
       return this.fetchRequest.perform()
@@ -94,7 +94,7 @@ export class FormSubmission {
     const { stopping, stopped } = FormSubmissionState
     if (this.state != stopping && this.state != stopped) {
       this.state = stopping
-      this.fetchRequest.cancel()
+      this.fetchRequest.cancel() //请求停止的时候，需要把提交取消
       return true
     }
   }
