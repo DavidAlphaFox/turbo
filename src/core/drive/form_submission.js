@@ -18,7 +18,7 @@ export const FormEnctype = {
   multipart: "multipart/form-data",
   plain: "text/plain"
 }
-
+//进行表单提交
 export class FormSubmission {
   state = FormSubmissionState.initialized
 
@@ -27,8 +27,8 @@ export class FormSubmission {
   }
 
   constructor(delegate, formElement, submitter, mustRedirect = false) {
-    const method = getMethod(formElement, submitter)
-    const action = getAction(getFormAction(formElement, submitter), method)
+    const method = getMethod(formElement, submitter) //提交方法
+    const action = getAction(getFormAction(formElement, submitter), method) //提交地址
     const body = buildFormData(formElement, submitter)
     const enctype = getEnctype(formElement, submitter)
 
@@ -210,7 +210,7 @@ export class FormSubmission {
     return this.submitter?.getAttribute("data-turbo-submits-with")
   }
 }
-
+//从element上构建表单数据，并且submitter可以提供一组额外的数据
 function buildFormData(formElement, submitter) {
   const formData = new FormData(formElement)
   const name = submitter?.getAttribute("name")
@@ -237,7 +237,7 @@ function getCookieValue(cookieName) {
 function responseSucceededWithoutRedirect(response) {
   return response.statusCode == 200 && !response.redirected
 }
-
+//会先尝试从submitter中获取提交的地址，如果没有就从element上获取
 function getFormAction(formElement, submitter) {
   const formElementAction = typeof formElement.action === "string" ? formElement.action : null
 
@@ -250,14 +250,14 @@ function getFormAction(formElement, submitter) {
 
 function getAction(formAction, fetchMethod) {
   const action = expandURL(formAction)
-
+  //构建一个完整的URL地址，其中使用document.baseURI来进行补全
   if (isSafe(fetchMethod)) {
     action.search = ""
-  }
+  } //如果是get方法，就把search中的参数清理掉
 
   return action
 }
-
+//获取表单提交中的操作方法GET POST等，会先从submitter中获取方法
 function getMethod(formElement, submitter) {
   const method = submitter?.getAttribute("formmethod") || formElement.getAttribute("method") || ""
   return fetchMethodFromString(method.toLowerCase()) || FetchMethod.get

@@ -3,7 +3,7 @@ import { FormSubmission } from "./form_submission"
 import { expandURL, getAnchor, getRequestURL } from "../url"
 import { Visit } from "./visit"
 import { PageSnapshot } from "./page_snapshot"
-
+//导航
 export class Navigator {
   constructor(delegate) {
     this.delegate = delegate
@@ -14,13 +14,13 @@ export class Navigator {
       this.delegate.visitProposedToLocation(location, options)
     }
   }
-
+  // 开始进行导航
   startVisit(locatable, restorationIdentifier, options = {}) {
-    this.stop()
+    this.stop() //先停止正在进行的操作
     this.currentVisit = new Visit(this, expandURL(locatable), restorationIdentifier, {
       referrer: this.location,
       ...options
-    })
+    }) //创建新的访问
     this.currentVisit.start()
   }
 
@@ -30,7 +30,7 @@ export class Navigator {
 
     this.formSubmission.start()
   }
-
+  //如果当前页面存在表单提交，就停止表单提交
   stop() {
     if (this.formSubmission) {
       this.formSubmission.stop()

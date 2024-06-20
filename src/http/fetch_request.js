@@ -207,7 +207,7 @@ export class FetchRequest {
     return !event.defaultPrevented
   }
 }
-
+//get操作是safe的？ 等幂性
 export function isSafe(fetchMethod) {
   return fetchMethodFromString(fetchMethod) == FetchMethod.get
 }

@@ -18,7 +18,7 @@ import { PageView } from "./drive/page_view"
 import { FrameElement } from "../elements/frame_element"
 import { Preloader } from "./drive/preloader"
 import { Cache } from "./cache"
-
+//定义Session
 export class Session {
   navigator = new Navigator(this)
   history = new History(this)
