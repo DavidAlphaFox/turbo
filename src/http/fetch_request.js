@@ -126,7 +126,7 @@ export class FetchRequest {
       this.delegate.requestStarted(this) //通知代理请求开始
 
       if (event.detail.fetchRequest) {
-        this.response = event.detail.fetchRequest.response
+        this.response = event.detail.fetchRequest.response //当使用者产生自己的fetch请求时，使用这个请求，而不是框架自己请求
       } else {
         this.response = fetch(this.url.href, fetchOptions)
       }//执行真正的请求
@@ -193,7 +193,7 @@ export class FetchRequest {
     }) //派发自定义事件turbo:before-fetch-request
     this.url = event.detail.url
     if (event.defaultPrevented) await requestInterception
-
+    //这里是直接用来暂停这个请求的，如果事件暂停了，需要用requestInterception来恢复
     return event
   }
 
