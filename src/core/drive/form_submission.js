@@ -100,7 +100,7 @@ export class FormSubmission {
   }
 
   // Fetch request delegate
-
+  // FetchRequest的回调方法，用来准备请求
   prepareRequest(request) {
     if (!request.isSafe) { //如果不是get请求，需要从meta部分获取csrf-token,并对header进行设置
       const token = getCookieValue(getMetaContent("csrf-param")) || getMetaContent("csrf-token")
@@ -108,7 +108,7 @@ export class FormSubmission {
         request.headers["X-CSRF-Token"] = token
       }
     }
-
+    //支持steam的请求，为请求增加可以接受的类型
     if (this.requestAcceptsTurboStreamResponse(request)) {
       request.acceptResponseType(StreamMessage.contentType)
     }
@@ -201,7 +201,7 @@ export class FormSubmission {
   requestMustRedirect(request) {
     return !request.isSafe && this.mustRedirect
   }
-
+  //如果不是get请求，且拥有元素或者提交者data-turbo-stream属性
   requestAcceptsTurboStreamResponse(request) {
     return !request.isSafe || hasAttribute("data-turbo-stream", this.submitter, this.formElement)
   }
