@@ -102,7 +102,7 @@ export class FormSubmission {
   // Fetch request delegate
 
   prepareRequest(request) {
-    if (!request.isSafe) {
+    if (!request.isSafe) { //如果不是get请求，需要从meta部分获取csrf-token,并对header进行设置
       const token = getCookieValue(getMetaContent("csrf-param")) || getMetaContent("csrf-token")
       if (token) {
         request.headers["X-CSRF-Token"] = token
