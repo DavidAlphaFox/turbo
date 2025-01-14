@@ -10,7 +10,7 @@ function fetchWithTurboHeaders(url, options = {}) {
   const requestUID = uuid()
   recentRequests.add(requestUID)
   modifiedHeaders.append("X-Turbo-Request-Id", requestUID)
-
+  //添加X-Turbo-Request-Id
   return nativeFetch(url, {
     ...options,
     headers: modifiedHeaders

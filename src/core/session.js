@@ -91,7 +91,7 @@ export class Session {
   registerAdapter(adapter) {
     this.adapter = adapter
   }
-
+// 对特定的页面进行浏览
   visit(location, options = {}) {
     const frameElement = options.frame ? document.getElementById(options.frame) : null
 
@@ -248,8 +248,8 @@ export class Session {
   }
 
   followedLinkToLocation(link, location) {
-    const action = this.getActionForLink(link)
-    const acceptsStreamResponse = link.hasAttribute("data-turbo-stream")
+    const action = this.getActionForLink(link) //得到link的动作类型
+    const acceptsStreamResponse = link.hasAttribute("data-turbo-stream") //看是否是turbo stream
 
     this.visit(location.href, { action, acceptsStreamResponse })
   }
